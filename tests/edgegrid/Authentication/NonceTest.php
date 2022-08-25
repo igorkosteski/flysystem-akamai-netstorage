@@ -9,6 +9,7 @@
  * @link https://developer.akamai.com
  * @link https://developer.akamai.com/introduction/Client_Auth.html
  */
+
 namespace Akamai\Open\EdgeGrid\Tests\Client\Authentication;
 
 class NonceTest extends \PHPUnit\Framework\TestCase

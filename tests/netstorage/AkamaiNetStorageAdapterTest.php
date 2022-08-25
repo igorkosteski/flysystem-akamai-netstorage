@@ -57,7 +57,6 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
             }
         } catch (\Exception $e) {
         }
-
     }
 
     // public function tearDown(): void

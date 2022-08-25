@@ -19,6 +19,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 namespace League\Flysystem\AkamaiNetStorage\Handler;
 
 use League\Flysystem\AkamaiNetStorage\Authentication as Signer;
@@ -38,7 +39,7 @@ class Authentication
             $this->signer = new Signer();
         }
     }
-    
+
     public function __invoke(callable $handler)
     {
         return function (
@@ -50,14 +51,14 @@ class Authentication
             if (sizeof($action) === 0) {
                 return $handler($request, $config);
             }
-            
+
             if (!$this->signer) {
                 throw new \Exception("You must call setSigner before trying to sign a request");
             }
 
             $this->signer->setPath($request->getUri()->getPath())
                 ->setAction($action[0]);
-            
+
             foreach ($this->signer->createAuthHeaders() as $header => $value) {
                 $request = $request->withHeader($header, $value);
             }

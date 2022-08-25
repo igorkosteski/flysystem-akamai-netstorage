@@ -9,6 +9,7 @@
  * @link https://developer.akamai.com
  * @link https://developer.akamai.com/introduction/Client_Auth.html
  */
+
 namespace Akamai\Open\EdgeGrid\Tests\Client;
 
 class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
@@ -57,7 +58,8 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $this->assertEquals($expected, $result);
     }
 
-    public function testCreateAuthHeaderTrailingSpaces() {
+    public function testCreateAuthHeaderTrailingSpaces()
+    {
         $mockTimestamp = $this->prophesize('\Akamai\Open\EdgeGrid\Authentication\Timestamp');
         $mockTimestamp->__toString()->willReturn("20170831T19:34:21+0000");
         $mockTimestamp->isValid()->willReturn(true);
@@ -609,7 +611,7 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $authentication = \Akamai\Open\EdgeGrid\Authentication::createInstance('default', __DIR__ . '/edgerc/.edgerc');
 
         $this->assertInstanceOf('\Akamai\Open\EdgeGrid\Authentication', $authentication);
-      
+
         $this->assertObjectHasAttribute(
             'auth',
             $authentication
@@ -640,12 +642,12 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $authentication = \Akamai\Open\EdgeGrid\Authentication::createInstance('testing', __DIR__ . '/edgerc/.edgerc');
 
         $this->assertInstanceOf('\Akamai\Open\EdgeGrid\Authentication', $authentication);
-        
+
         $this->assertObjectHasAttribute(
             'auth',
             $authentication
         );
-        
+
         $this->assertEquals(
             'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
             $authentication->getHost()
@@ -679,7 +681,7 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
             'auth',
             $authentication
         );
-        
+
         $this->assertEquals(
             'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
             $authentication->getHost()
@@ -744,7 +746,7 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
             'auth',
             $authentication
         );
-        
+
         $this->assertEquals(
             'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
             $authentication->getHost()

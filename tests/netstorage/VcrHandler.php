@@ -7,7 +7,7 @@ namespace League\Flysystem\AkamaiNetStorage\Tests;
  *
  * Records and automatically replays responses on subsequent requests
  * for unit testing
- * 
+ *
  * @package Dshafik\GuzzleHttp
  */
 class VcrHandler
@@ -18,7 +18,7 @@ class VcrHandler
     protected $cassette;
 
     /**
-     * @param string $cassette fixture path 
+     * @param string $cassette fixture path
      * @return \GuzzleHttp\HandlerStack
      */
     public static function turnOn($cassette)
@@ -42,7 +42,7 @@ class VcrHandler
 
     /**
      * Constructor
-     * 
+     *
      * @param string $cassette fixture path
      */
     protected function __construct($cassette)

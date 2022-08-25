@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace League\Flysystem\AkamaiNetStorage;
 
 use GuzzleHttp\HandlerStack;
-use Akamai\Open\EdgeGrid\Exception;
 use Psr\Http\Client\ClientInterface;
 use Akamai\Open\EdgeGrid\Client as EdgeGridClient;
 use League\Flysystem\AkamaiNetStorage\Handler\Authentication as HandlerAuthentication;
@@ -76,7 +75,8 @@ class AkamaiNetStorageClient
      *
      * @return ClientInterface
      */
-    public function getClient(): ClientInterface {
+    public function getClient(): ClientInterface
+    {
         return $this->client;
     }
 }

@@ -9,6 +9,7 @@
  * @link https://developer.akamai.com
  * @link https://developer.akamai.com/introduction/Client_Auth.html
  */
+
 namespace Akamai\Open\EdgeGrid\Tests\Handler;
 
 use GuzzleHttp\Psr7\Response;
@@ -354,7 +355,7 @@ EOF;
         $handler = new \Akamai\Open\EdgeGrid\Handler\Debug('php://stdout');
         $this->assertObjectHasAttribute('fp', $handler);
     }
-    
+
     public function testInvalidStringResource()
     {
         $this->expectException(\Akamai\Open\EdgeGrid\Exception\HandlerException\IOException::class);

@@ -19,6 +19,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 namespace League\Flysystem\AkamaiNetStorage;
 
 use Akamai\Open\EdgeGrid\Authentication\Nonce;
@@ -52,9 +53,9 @@ class Authentication
     protected $nonce;
 
     protected $path;
-    
+
     protected $action;
-    
+
     public function createAuthHeaders()
     {
         $auth_data = implode(", ", [
@@ -67,7 +68,7 @@ class Authentication
             ($this->nonce instanceof Nonce) ? (string) $this->nonce : new Nonce(),
             $this->key_name
         ]);
-        
+
         return [
             'X-Akamai-ACS-Auth-Data' => $auth_data,
             'X-Akamai-ACS-Auth-Sign' => $this->signRequest($auth_data)
@@ -124,7 +125,7 @@ class Authentication
     {
         $url = parse_url($path);
         $this->path = $url['path'];
-        
+
         return $this;
     }
 
@@ -163,7 +164,7 @@ class Authentication
         $hash = base64_encode(hash_hmac('sha256', (string) $data, $this->key, true));
         return $hash;
     }
-    
+
     /**
      * Returns a string with all data that will be signed
      *

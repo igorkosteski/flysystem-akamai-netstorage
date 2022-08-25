@@ -19,7 +19,6 @@ namespace Akamai\Open\EdgeGrid\Tests;
  */
 class SimpleLog implements \Psr\Log\LoggerInterface
 {
-
     /**
      * System is unusable.
      *

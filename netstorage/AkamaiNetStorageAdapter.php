@@ -97,7 +97,6 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
         try {
             return $this->getMetadata($path) instanceof StorageAttributes;
         } catch (UnableToCheckFileExistence $e) {
-
             return false;
         }
     }
@@ -117,7 +116,6 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
         }
 
         try {
-
             $this->ensurePath($path);
 
             // Upload the file
@@ -171,7 +169,7 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
     }
 
     /**
-     * 
+     *
      * @param string $path
      * @return resource
      * @throws UnableToReadFile
@@ -196,13 +194,12 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
     }
 
     /**
-     * 
+     *
      * @param string $path
      * @throws UnableToDeleteFile
      */
     public function delete(string $path): void
     {
-
         // TODO: Fix delete.
 
         // try {
@@ -234,7 +231,6 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
     public function listContents(string $path, bool $deep): iterable
     {
         try {
-
             $response = $this->edgeGridClient->get($this->preparePath($path), [
                 'headers' => [
                     'X-Akamai-ACS-Action' => $this->getAcsActionHeaderValue('dir')
@@ -248,7 +244,6 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
             $dirs = [];
 
             foreach ($xml->file as $file) {
-
                 if ((string) $file['type'] === StorageAttributes::TYPE_DIRECTORY) {
                     $directoryData = $this->handleDirectoryData($baseDir, $file);
 
@@ -259,7 +254,6 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
                     }
 
                     if ($directoryData->extraMetadata()['files'] ?? 0 > 0) {
-
                         $subDirectory = $this->prefixer->stripPrefix($this->cpCodePrefixer->prefixDirectoryPath($directoryData->path()));
 
                         foreach ($this->listContents($subDirectory, $deep) as $child) {
@@ -280,7 +274,7 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
     }
 
     /**
-     * 
+     *
      * @param string $prefix
      * @return void
      * @throws UnableToDeleteDirectory
@@ -422,12 +416,10 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
         }
 
         try {
-
             $this->copy($source, $destination, $config);
 
             // TODO: test and fix this.
             // $this->delete($source, $config);
-
         } catch (Exception $e) {
             throw UnableToMoveFile::fromLocationTo($source, $destination, $e);
         }
@@ -448,7 +440,6 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
         }
 
         try {
-
             $stream = $this->readStream($source);
 
             if ($stream === false || !is_resource($stream)) {
@@ -472,7 +463,7 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
     }
 
     /**
-     * 
+     *
      * @param string $path
      * @return void
      */
@@ -518,7 +509,6 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
                     'X-Akamai-ACS-Action' => $this->getAcsActionHeaderValue('stat')
                 ]
             ]);
-
         } catch (RequestException $e) {
             throw UnableToCheckFileExistence::forLocation($path, $e);
         }
@@ -529,7 +519,7 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
     }
 
     /**
-     * 
+     *
      * @param $action
      * @param array|null $options
      * @return string

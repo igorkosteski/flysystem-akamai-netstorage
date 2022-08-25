@@ -20,7 +20,7 @@ namespace Akamai\Open\EdgeGrid\Authentication;
  */
 class Nonce
 {
-    const FORMAT = 'Ymd\TH:i:sO';
+    public const FORMAT = 'Ymd\TH:i:sO';
 
     /**
      * @var string The current random function to use
