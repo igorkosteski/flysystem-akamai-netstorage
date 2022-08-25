@@ -1,0 +1,78 @@
+[
+    {
+        "status": 200,
+        "headers": {
+            "Accept-Ranges": [
+                "bytes"
+            ],
+            "Content-Length": [
+                "165"
+            ],
+            "Content-Type": [
+                "text\/xml"
+            ],
+            "Server": [
+                "AkamaiNetStorage"
+            ],
+            "Expires": [
+                "Thu, 25 Aug 2022 22:31:10 GMT"
+            ],
+            "Cache-Control": [
+                "max-age=0, no-cache, no-store"
+            ],
+            "Pragma": [
+                "no-cache"
+            ],
+            "Date": [
+                "Thu, 25 Aug 2022 22:31:10 GMT"
+            ],
+            "Connection": [
+                "keep-alive"
+            ],
+            "X-VCR-Recording": [
+                "1661466670"
+            ]
+        },
+        "body": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSI\/Pgo8c3RhdCBkaXJlY3Rvcnk9Ii8yMDczMS9hbm9uLmdyb292eS9jbGllbnRzL3NtbHBzL3Rlc3QiPgogPGZpbGUgdHlwZT0iZGlyIiBuYW1lPSJ0ZXN0aW5nLTIiIG10aW1lPSIxNjYxNDY0NDA0Ii8+Cjwvc3RhdD4K",
+        "version": "1.1",
+        "reason": "OK"
+    },
+    {
+        "status": 404,
+        "headers": {
+            "Accept-Ranges": [
+                "bytes"
+            ],
+            "Content-Length": [
+                "10"
+            ],
+            "Server": [
+                "AkamaiNetStorage"
+            ],
+            "X-N": [
+                "S"
+            ],
+            "Expires": [
+                "Thu, 25 Aug 2022 22:31:10 GMT"
+            ],
+            "Cache-Control": [
+                "max-age=0, no-cache, no-store"
+            ],
+            "Pragma": [
+                "no-cache"
+            ],
+            "Date": [
+                "Thu, 25 Aug 2022 22:31:10 GMT"
+            ],
+            "Connection": [
+                "keep-alive"
+            ],
+            "X-VCR-Recording": [
+                "1661466670"
+            ]
+        },
+        "body": "Tm90IGZvdW5kCg==",
+        "version": "1.1",
+        "reason": "Not Found"
+    }
+]
