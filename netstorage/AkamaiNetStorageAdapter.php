@@ -21,7 +21,6 @@ use League\Flysystem\UnableToDeleteFile;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use League\Flysystem\DirectoryAttributes;
-use League\Flysystem\FileExistsException;
 use League\Flysystem\FilesystemException;
 use GuzzleHttp\Exception\RequestException;
 use League\Flysystem\UnableToSetVisibility;
