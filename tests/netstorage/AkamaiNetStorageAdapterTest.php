@@ -22,6 +22,8 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
 
     protected $workingDir = 'working-dir';
 
+    protected $baseUrl = 'company.akamaihd.net.example.org';
+
     /**
      * @var \League\Flysystem\Filesystem
      */
@@ -47,7 +49,13 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
             'handler' => $stack
         ]);
 
-        $this->adapter = new \League\Flysystem\AkamaiNetStorage\AkamaiNetStorageAdapter($client, $this->cpCode, $this->prefix);
+        $this->adapter = new \League\Flysystem\AkamaiNetStorage\AkamaiNetStorageAdapter(
+            $client,
+            $this->cpCode,
+            $this->prefix,
+            $this->baseUrl
+        );
+
         $this->fs = new \League\Flysystem\Filesystem($this->adapter);
 
         $this->config = [];
@@ -319,5 +327,13 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
 
         $this->assertFalse($this->fs->fileExists($file));
         $this->assertTrue($this->fs->fileExists($file2));
+    }
+
+    public function testGetUrl()
+    {
+        $file = $this->workingDir . '/example.txt';
+        $this->fs->write($file, __METHOD__);
+
+        $this->assertEquals($this->baseUrl . '/' . $file, $this->adapter->getUrl($file));
     }
 }

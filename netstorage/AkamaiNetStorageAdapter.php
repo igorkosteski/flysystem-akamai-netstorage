@@ -60,12 +60,17 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
     private $mimeTypeDetector;
 
     /**
+     * @var string
+     */
+    private $baseUrl;
+
+    /**
      *
      * @param ClientInterface $edgeGridClient
      * @param string $cpCode
      * @param string $prefix
      */
-    public function __construct(ClientInterface $edgeGridClient, string $cpCode, string $pathPrefix = '')
+    public function __construct(ClientInterface $edgeGridClient, string $cpCode, string $pathPrefix = '', string $baseUrl = '')
     {
         $this->edgeGridClient = $edgeGridClient;
 
@@ -85,6 +90,8 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
         $this->prefixer = new PathPrefixer($prefix);
 
         $this->mimeTypeDetector = new FinfoMimeTypeDetector();
+
+        $this->baseUrl = $baseUrl;
     }
 
     /**
@@ -485,6 +492,21 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
         } catch (Exception $e) {
             throw UnableToCopyFile::fromLocationTo($source, $destination, $e);
         }
+    }
+
+    /**
+     * Get url
+     *
+     * @param string $path
+     * @return string
+     */
+    public function getUrl(string $path): string
+    {
+        if (trim($this->baseUrl) === '') {
+            throw new Exception('baseUrl is not set!');
+        }
+
+        return $this->baseUrl . '/' . $path;
     }
 
     /**

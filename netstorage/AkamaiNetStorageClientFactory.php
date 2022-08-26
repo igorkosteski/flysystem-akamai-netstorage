@@ -9,7 +9,7 @@ use Psr\Http\Client\ClientInterface;
 use Akamai\Open\EdgeGrid\Client as EdgeGridClient;
 use League\Flysystem\AkamaiNetStorage\Handler\Authentication as HandlerAuthentication;
 
-class AkamaiNetStorageClient
+class AkamaiNetStorageClientFactory
 {
     /**
      * @var ClientInterface $client
