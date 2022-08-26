@@ -25,7 +25,7 @@ class AkamaiNetStorageClient
         $config = self::parseConfig($config);
 
         $signer = new Authentication();
-        $signer->setKey(...$config['signer']);
+        $signer->setKey($config['signer']['key'], $config['signer']['name']);
 
         $handlerAuthentication = new HandlerAuthentication();
         $handlerAuthentication->setSigner($signer);
