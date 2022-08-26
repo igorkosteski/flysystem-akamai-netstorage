@@ -28,6 +28,7 @@ use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToCheckFileExistence;
 use Akamai\Open\EdgeGrid\Client as EdgeGridClient;
+use League\Flysystem\UnableToDeleteDirectory;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 
@@ -95,7 +96,22 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
     public function fileExists(string $path): bool
     {
         try {
-            return $this->getMetadata($path) instanceof StorageAttributes;
+            return $this->getMetadata($path) instanceof FileAttributes;
+        } catch (UnableToCheckFileExistence $e) {
+            return false;
+        }
+    }
+
+    /**
+     *
+     * @param string $path
+     * @return boolean
+     * @throws FilesystemException
+     */
+    public function directoryExists(string $path): bool
+    {
+        try {
+            return $this->getMetadata($path) instanceof DirectoryAttributes;
         } catch (UnableToCheckFileExistence $e) {
             return false;
         }
@@ -200,25 +216,68 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
      */
     public function delete(string $path): void
     {
-        // TODO: Fix delete.
+        try {
+            $action = 'delete';
 
-        // try {
-        //     $action = 'delete';
+            $meta = $this->getMetadata($path);
 
-        //     $meta = $this->getMetadata($path);
+            if ($meta->type() === StorageAttributes::TYPE_DIRECTORY) {
+                throw UnableToDeleteFile::atLocation($path, 'The path is directory!');
+            }
 
-        //     if ($meta->type() === StorageAttributes::TYPE_DIRECTORY) {
-        //         $action = 'rmdir';
-        //     }
+            $this->edgeGridClient->post($this->preparePath($path), [
+                'headers' => [
+                    'X-Akamai-ACS-Action' => $this->getAcsActionHeaderValue($action),
+                ]
+            ]);
+        } catch (UnableToCheckFileExistence $e) {
+            throw UnableToDeleteFile::atLocation($path, $e->getMessage(), $e);
+        } catch (Exception $e) {
+            throw UnableToDeleteFile::atLocation($path, $e->getMessage(), $e);
+        }
+    }
 
-        //     $this->edgeGridClient->post($this->preparePath($path), [
-        //         'headers' => [
-        //             'X-Akamai-ACS-Action' => $this->getAcsActionHeaderValue($action),
-        //         ]
-        //     ]);
-        // } catch (RequestException $e) {
-        //     throw UnableToDeleteFile::atLocation($path, $e->getMessage());
-        // }
+    /**
+     *
+     * @param string $prefix
+     * @return void
+     * @throws UnableToDeleteDirectory
+     */
+    public function deleteDirectory(string $path): void
+    {
+        if (!$this->directoryExists($path)) {
+            return;
+        }
+
+        try {
+            $meta = $this->getMetadata($path);
+
+            if ($meta->type() !== StorageAttributes::TYPE_DIRECTORY) {
+                throw UnableToDeleteDirectory::atLocation($path, 'The path is file.');
+            }
+
+            $items = $this->listContents($path, true);
+
+            $directories = [];
+            foreach ($items as $item) {
+
+                $itemPath = $this->prefixer->stripPrefix($this->cpCodePrefixer->prefixDirectoryPath($item->path()));
+
+                if ($item instanceof FileAttributes) {
+                    $this->delete(rtrim($itemPath, '\\/'));
+                } else {
+                    $directories[] = $itemPath;
+                }
+            }
+
+            $directories[] = $path;
+
+            foreach ($directories as $directory) {
+                $this->deleteDirectoryApi($directory);
+            }
+        } catch (ClientException $e) {
+            throw UnableToDeleteDirectory::atLocation($path, $e->getMessage(), $e);
+        }
     }
 
     /**
@@ -271,29 +330,6 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
             throw UnableToReadFile::fromLocation($path);
         }
         return $dirs;
-    }
-
-    /**
-     *
-     * @param string $prefix
-     * @return void
-     * @throws UnableToDeleteDirectory
-     */
-    public function deleteDirectory(string $path): void
-    {
-        if (!$this->fileExists($path)) {
-            return;
-        }
-
-
-        // TODO: implement and test this
-        // $items = $this->listContents($path, true);
-        // foreach ($items as $item) {
-
-        //     $itemPath = $this->prefixer->stripPrefix($this->cpCodePrefixer->prefixDirectoryPath($item->path()));
-
-        //     $this->delete($itemPath);
-        // }
     }
 
     /**
@@ -418,8 +454,7 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
         try {
             $this->copy($source, $destination, $config);
 
-            // TODO: test and fix this.
-            // $this->delete($source, $config);
+            $this->delete($source, $config);
         } catch (Exception $e) {
             throw UnableToMoveFile::fromLocationTo($source, $destination, $e);
         }
@@ -543,6 +578,10 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
      */
     private function handleFileMetaData(string $baseDir, ?SimpleXMLElement $file = null): StorageAttributes
     {
+        if ((string) $file['type'] === StorageAttributes::TYPE_DIRECTORY) {
+            return $this->handleDirectoryData($baseDir, $file);
+        }
+
         $meta = [
             'type' => (string) $file['type'],
             'path' => (string) $baseDir . '/' . (string) $file['name'],
@@ -608,5 +647,33 @@ class AkamaiNetStorageAdapter implements FilesystemAdapter
             $meta['timestamp'] ?? null,
             $meta['extraMetadata'] ?? []
         );
+    }
+
+    /**
+     *
+     * @param string $path
+     * @throws UnableToDeleteDirectory
+     */
+    private function deleteDirectoryApi(string $path): void
+    {
+        try {
+            $action = 'rmdir';
+
+            $meta = $this->getMetadata($path);
+
+            if ($meta->type() !== StorageAttributes::TYPE_DIRECTORY) {
+                throw UnableToDeleteFile::atLocation($path, 'The path is file!');
+            }
+
+            $this->edgeGridClient->post($this->preparePath($path), [
+                'headers' => [
+                    'X-Akamai-ACS-Action' => $this->getAcsActionHeaderValue($action),
+                ]
+            ]);
+        } catch (UnableToCheckFileExistence $e) {
+            throw UnableToDeleteDirectory::atLocation($path, $e->getMessage(), $e);
+        } catch (ClientException $e) {
+            throw UnableToDeleteDirectory::atLocation($path, $e->getMessage(), $e);
+        }
     }
 }

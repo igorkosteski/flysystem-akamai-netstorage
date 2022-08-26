@@ -4,6 +4,7 @@ namespace League\Flysystem\AkamaiNetStorage\Tests;
 
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
+use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToWriteFile;
 
@@ -52,21 +53,20 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
         $this->config = [];
 
         try {
-            if (! $this->fs->fileExists($this->workingDir)) {
+            if (!$this->fs->fileExists($this->workingDir)) {
                 $this->fs->createDirectory($this->workingDir);
             }
         } catch (\Exception $e) {
         }
     }
 
-    // public function tearDown(): void
-    // {
-    //     try {
-    //         $this->fs->deleteDirectory(DIRECTORY_SEPARATOR . '/' . ltrim($this->workingDir, '\\/'));
-    //     } catch (\Exception $e) {
-
-    //     }
-    // }
+    public function tearDown(): void
+    {
+        try {
+            $this->fs->deleteDirectory($this->workingDir);
+        } catch (\Exception $e) {
+        }
+    }
 
     public function testFileExists()
     {
@@ -79,6 +79,23 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
     {
         $file = $this->workingDir . '/non-existent.txt';
         $this->assertFalse($this->fs->fileExists($file));
+    }
+
+    public function testDirectoryExists()
+    {
+        $this->assertTrue($this->fs->directoryExists($this->workingDir));
+    }
+
+    public function testDirectoryNotExists()
+    {
+        $file = $this->workingDir . '/non-existent';
+        $this->assertFalse($this->fs->directoryExists($file));
+
+        $file = $this->workingDir . '/example.txt';
+        $this->fs->write($file, __METHOD__);
+
+        $file = $this->workingDir . '/example.txt';
+        $this->assertFalse($this->fs->directoryExists($file));
     }
 
     public function testWrite()
@@ -94,7 +111,7 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
         $this->fs->write($file, __METHOD__);
 
         $this->expectException(UnableToWriteFile::class);
-        $this->expectErrorMessage('Unable to write file at location: ' . $file .'. File already exists!');
+        $this->expectErrorMessage('Unable to write file at location: ' . $file . '. File already exists!');
 
         $this->fs->write($file, __METHOD__);
     }
@@ -122,7 +139,7 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
 
         $file = $this->workingDir . '/example.txt';
         $this->expectException(UnableToWriteFile::class);
-        $this->expectErrorMessage('Unable to write file at location: ' . $file .'. File already exists!');
+        $this->expectErrorMessage('Unable to write file at location: ' . $file . '. File already exists!');
 
         try {
             $this->fs->writeStream($file, $fp);
@@ -145,7 +162,7 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
     {
         $file = $this->workingDir . '/non-existent.txt';
         $this->expectException(UnableToReadFile::class);
-        $this->expectErrorMessage('Unable to read file from location: ' . $file .'.');
+        $this->expectErrorMessage('Unable to read file from location: ' . $file . '.');
 
         $this->fs->read($file);
     }
@@ -161,17 +178,39 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
     {
         $file = $this->workingDir . '/non-existent';
         $this->expectException(UnableToReadFile::class);
-        $this->expectErrorMessage('Unable to read file from location: ' . $file .'. ');
+        $this->expectErrorMessage('Unable to read file from location: ' . $file . '. ');
         $this->fs->readStream($file);
     }
 
-    // TODO:
-    // public function testDelete()
-    // {
-    //     $file = $this->workingDir . '/example.txt';
-    //     $this->fs->delete($file);
-    //     $this->assertFalse($this->fs->fileExists($file));
-    // }
+    public function testDelete()
+    {
+        $file = $this->workingDir . '/example.txt';
+        $this->fs->write($file, __METHOD__);
+
+        $this->fs->delete($file);
+        $this->assertFalse($this->fs->fileExists($file));
+    }
+
+    public function testUnableToDeleteFileDirectory()
+    {
+        $dir = $this->workingDir . '/test-dir';
+        $this->fs->createDirectory($dir);
+
+        $this->expectException(UnableToDeleteFile::class);
+        $this->expectErrorMessage('Unable to delete file located at: ' . $dir . '. The path is directory!');
+
+        $this->fs->delete($dir);
+    }
+
+    public function testUnableToDeleteNonExistentFile()
+    {
+        $file = $this->workingDir . '/non-existent.txt';
+
+        $this->expectException(UnableToDeleteFile::class);
+        $this->expectErrorMessage('Unable to delete file located at: ' . $file . '.');
+
+        $this->fs->delete($file);
+    }
 
     public function testListContents()
     {
@@ -202,11 +241,39 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('text/html', $contents2[3]->mimeType());
     }
 
+    public function testDeleteDirectory()
+    {
+        $directory = $this->workingDir . '/test';
+        $this->fs->createDirectory($directory);
+
+        $file1 = $directory . '/example1.txt';
+        $this->fs->write($file1, __METHOD__);
+
+        $file2 = $directory . '/example2.txt';
+        $this->fs->write($file2, __METHOD__);
+
+        $subDir1 = $directory . '/test1';
+        $this->fs->createDirectory($subDir1);
+
+        $file3 = $subDir1 . '/example3.html';
+        $this->fs->write($file3, '<h1>HI</h1>');
+
+        $subDir2 = $directory . '/test2';
+        $this->fs->createDirectory($subDir2);
+
+        $file3 = $subDir2 . '/example4.html';
+        $this->fs->write($file3, '<h1>HI 5</h1>');
+
+        $this->fs->deleteDirectory($directory);
+
+        $this->assertFalse($this->fs->directoryExists($directory));
+    }
+
     public function testCreateDirectory()
     {
         $directory = $this->workingDir . '/test3';
         $this->fs->createDirectory($directory);
-        $this->assertTrue($this->fs->fileExists($directory));
+        $this->assertTrue($this->fs->directoryExists($directory));
     }
 
     public function testMimeType()
@@ -220,7 +287,7 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
     {
         $file = $this->workingDir . '/example.txt';
         $this->fs->write($file, __METHOD__);
-        $this->assertSame(1661468151, $this->fs->lastModified($file));
+        $this->assertLessThanOrEqual(time(), $this->fs->lastModified($file));
     }
 
     public function testFileSize()
@@ -250,8 +317,7 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
         $file2 = $this->workingDir . '/example2.txt';
         $this->fs->move($file, $file2);
 
-        // TODO:
-        // $this->assertFalse($this->fs->fileExists($file));
+        $this->assertFalse($this->fs->fileExists($file));
         $this->assertTrue($this->fs->fileExists($file2));
     }
 }
