@@ -1,5 +1,5 @@
 {
-  "name": "league/flysystem-akamai-netstorage",
+  "name": "igorkgg/flysystem-akamai-netstorage",
   "description": "Akamai Netstorage filesystem adapter for Flysystem.",
   "keywords": [
     "flysystem",
