@@ -13,7 +13,7 @@ I created this package because [official akamai package](https://github.com/akam
 # Installation
 
 ```shell
-$ composer require "league/flysystem-akamai-netstorage" -vvv
+$ composer require "igorkgg/flysystem-akamai-netstorage" -vvv
 ```
 
 # Usage
