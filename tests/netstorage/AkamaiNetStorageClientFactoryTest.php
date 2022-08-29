@@ -2,10 +2,10 @@
 
 namespace League\Flysystem\AkamaiNetStorage\Tests;
 
-use League\Flysystem\AkamaiNetStorage\AkamaiNetStorageClient;
 use Exception;
+use League\Flysystem\AkamaiNetStorage\AkamaiNetStorageClientFactory;
 
-class AkamaiNetStorageClientTest extends \PHPUnit\Framework\TestCase
+class AkamaiNetStorageClientFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testValidGetClient()
     {
@@ -20,9 +20,9 @@ class AkamaiNetStorageClientTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $client = new AkamaiNetStorageClient($config);
+        $client = new AkamaiNetStorageClientFactory($config);
 
-        $this->assertInstanceOf(AkamaiNetStorageClient::class, $client);
+        $this->assertInstanceOf(AkamaiNetStorageClientFactory::class, $client);
     }
 
     /**
@@ -32,7 +32,7 @@ class AkamaiNetStorageClientTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectExceptionObject($excepton);
 
-        new AkamaiNetStorageClient($config);
+        new AkamaiNetStorageClientFactory($config);
     }
 
     public function invalidConfigProvider()
