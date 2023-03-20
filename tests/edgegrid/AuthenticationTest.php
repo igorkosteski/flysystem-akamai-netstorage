@@ -404,20 +404,25 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
         $this->assertInstanceOf('\Akamai\Open\EdgeGrid\Authentication', $authentication);
 
-        $this->assertObjectHasAttribute(
-            'auth',
-            $authentication
-        );
+        $authentication->setHttpMethod("POST");
+        $authHeaderParams = $this->_paraseAuthHeader($authentication->createAuthHeader());
 
         $this->assertEquals(
             'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
             $authentication->getHost()
         );
 
-        $this->assertObjectHasAttribute(
-            'max_body_size',
-            $authentication
-        );
+        $this->assertArrayHasKey('client_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('access_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('signature', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['signature']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['signature']);
     }
 
     public function testCreateFromEdgeRcColonsWithSpaces()
@@ -426,20 +431,26 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $authentication = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile(null, $file);
 
         $this->assertInstanceOf('\Akamai\Open\EdgeGrid\Authentication', $authentication);
-        $this->assertObjectHasAttribute(
-            'auth',
-            $authentication
-        );
 
         $this->assertEquals(
             'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
             $authentication->getHost()
         );
 
-        $this->assertObjectHasAttribute(
-            'max_body_size',
-            $authentication
-        );
+        $authentication->setHttpMethod("POST");
+        $authHeaderParams = $this->_paraseAuthHeader($authentication->createAuthHeader());
+
+        $this->assertArrayHasKey('client_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('access_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('signature', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['signature']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['signature']);
     }
 
     /**
@@ -493,25 +504,25 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
         $this->assertInstanceOf('\Akamai\Open\EdgeGrid\Authentication', $authentication);
 
-        $this->assertObjectHasAttribute(
-            'auth',
-            $authentication
-        );
-
         $this->assertEquals(
             'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
             $authentication->getHost()
         );
 
-        $this->assertObjectHasAttribute(
-            'max_body_size',
-            $authentication
-        );
+        $authentication->setHttpMethod("GET");
+        $authHeaderParams = $this->_paraseAuthHeader($authentication->createAuthHeader());
 
-        $this->assertObjectHasAttribute(
-            'max_body_size',
-            $authentication
-        );
+        $this->assertArrayHasKey('client_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('access_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('signature', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['signature']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['signature']);
     }
 
     /**
@@ -535,20 +546,25 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
         $this->assertInstanceOf('\Akamai\Open\EdgeGrid\Authentication', $authentication);
 
-        $this->assertObjectHasAttribute(
-            'auth',
-            $authentication
-        );
-
         $this->assertEquals(
             'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
             $authentication->getHost()
         );
 
-        $this->assertObjectHasAttribute(
-            'max_body_size',
-            $authentication
-        );
+        $authentication->setHttpMethod("GET");
+        $authHeaderParams = $this->_paraseAuthHeader($authentication->createAuthHeader());
+
+        $this->assertArrayHasKey('client_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('access_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('signature', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['signature']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['signature']);
     }
 
     /**
@@ -565,20 +581,25 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
         $this->assertInstanceOf('\Akamai\Open\EdgeGrid\Authentication', $authentication);
 
-        $this->assertObjectHasAttribute(
-            'auth',
-            $authentication
-        );
-
         $this->assertEquals(
             'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
             $authentication->getHost()
         );
 
-        $this->assertObjectHasAttribute(
-            'max_body_size',
-            $authentication
-        );
+        $authentication->setHttpMethod("GET");
+        $authHeaderParams = $this->_paraseAuthHeader($authentication->createAuthHeader());
+
+        $this->assertArrayHasKey('client_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('access_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('signature', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['signature']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['signature']);
     }
 
     public function testCreateFromEnvInvalid()
@@ -629,20 +650,25 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
         $this->assertInstanceOf('\Akamai\Open\EdgeGrid\Authentication', $authentication);
 
-        $this->assertObjectHasAttribute(
-            'auth',
-            $authentication
-        );
-
         $this->assertEquals(
             'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
             $authentication->getHost()
         );
 
-        $this->assertObjectHasAttribute(
-            'max_body_size',
-            $authentication
-        );
+        $authentication->setHttpMethod("GET");
+        $authHeaderParams = $this->_paraseAuthHeader($authentication->createAuthHeader());
+
+        $this->assertArrayHasKey('client_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('access_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('signature', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['signature']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['signature']);
     }
 
     public function testCreateInstanceFallbackEdgeRc()
@@ -651,20 +677,25 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
         $this->assertInstanceOf('\Akamai\Open\EdgeGrid\Authentication', $authentication);
 
-        $this->assertObjectHasAttribute(
-            'auth',
-            $authentication
-        );
-
         $this->assertEquals(
             'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
             $authentication->getHost()
         );
 
-        $this->assertObjectHasAttribute(
-            'max_body_size',
-            $authentication
-        );
+        $authentication->setHttpMethod("GET");
+        $authHeaderParams = $this->_paraseAuthHeader($authentication->createAuthHeader());
+
+        $this->assertArrayHasKey('client_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('access_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('signature', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['signature']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['signature']);
     }
 
     /**
@@ -682,20 +713,25 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
         $this->assertInstanceOf('\Akamai\Open\EdgeGrid\Authentication', $authentication);
 
-        $this->assertObjectHasAttribute(
-            'auth',
-            $authentication
-        );
-
         $this->assertEquals(
             'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
             $authentication->getHost()
         );
 
-        $this->assertObjectHasAttribute(
-            'max_body_size',
-            $authentication
-        );
+        $authentication->setHttpMethod("GET");
+        $authHeaderParams = $this->_paraseAuthHeader($authentication->createAuthHeader());
+
+        $this->assertArrayHasKey('client_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('access_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('signature', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['signature']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['signature']);
     }
 
     /**
@@ -716,20 +752,25 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
         $this->assertInstanceOf('\Akamai\Open\EdgeGrid\Authentication', $authentication);
 
-        $this->assertObjectHasAttribute(
-            'auth',
-            $authentication
-        );
-
         $this->assertEquals(
             'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
             $authentication->getHost()
         );
 
-        $this->assertObjectHasAttribute(
-            'max_body_size',
-            $authentication
-        );
+        $authentication->setHttpMethod("GET");
+        $authHeaderParams = $this->_paraseAuthHeader($authentication->createAuthHeader());
+
+        $this->assertArrayHasKey('client_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('access_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('signature', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['signature']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['signature']);
     }
 
     /**
@@ -747,20 +788,25 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
         $this->assertInstanceOf('\Akamai\Open\EdgeGrid\Authentication', $authentication);
 
-        $this->assertObjectHasAttribute(
-            'auth',
-            $authentication
-        );
-
         $this->assertEquals(
             'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
             $authentication->getHost()
         );
 
-        $this->assertObjectHasAttribute(
-            'max_body_size',
-            $authentication
-        );
+        $authentication->setHttpMethod("GET");
+        $authHeaderParams = $this->_paraseAuthHeader($authentication->createAuthHeader());
+
+        $this->assertArrayHasKey('client_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('access_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('signature', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['signature']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['signature']);
     }
 
     /**
@@ -781,20 +827,25 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
         $this->assertInstanceOf('\Akamai\Open\EdgeGrid\Authentication', $authentication);
 
-        $this->assertObjectHasAttribute(
-            'auth',
-            $authentication
-        );
-
         $this->assertEquals(
             'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
             $authentication->getHost()
         );
 
-        $this->assertObjectHasAttribute(
-            'max_body_size',
-            $authentication
-        );
+        $authentication->setHttpMethod("GET");
+        $authHeaderParams = $this->_paraseAuthHeader($authentication->createAuthHeader());
+
+        $this->assertArrayHasKey('client_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('access_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('signature', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['signature']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['signature']);
     }
 
     public function testCreateInstanceSectionFallbackInvalidEdgercNoEnv()
