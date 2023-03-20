@@ -101,12 +101,10 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $authentication->setHttpMethod('GET');
         $authentication->setPath('/test');
         $authentication->setHost('https://example.org');
-        $authentication->createAuthHeader();
+        $authHeaderParams = $this->_paraseAuthHeader($authentication->createAuthHeader());
 
-        $this->assertObjectHasAttribute(
-            'timestamp',
-            $authentication
-        );
+        $this->assertArrayHasKey('timestamp', $authHeaderParams);
+        $this->assertEquals(date(\Akamai\Open\EdgeGrid\Authentication\Timestamp::FORMAT), $authHeaderParams['timestamp']);
     }
 
     public function testDefaultNonce()
@@ -116,13 +114,13 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $authentication->setHttpMethod('GET');
         $authentication->setPath('/test');
         $authentication->setHost('https://example.org');
-        $authentication->createAuthHeader();
         $authentication->setNonce();
 
-        $this->assertObjectHasAttribute(
-            'nonce',
-            $authentication
-        );
+        $authHeaderParams = $this->_paraseAuthHeader($authentication->createAuthHeader());
+
+        $this->assertArrayHasKey('nonce', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['nonce']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['nonce']);
     }
 
     public function testTimestampTimeout()
@@ -138,10 +136,16 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $authentication->setTimestamp($timestamp);
         sleep(1);
 
-        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\SignerException\InvalidSignDataException::class);
-        $this->expectErrorMessage('Timestamp is invalid. Too old?');
-
-        $authentication->createAuthHeader();
+        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException::class);
+        $expectErrorMessage = 'Timestamp is invalid. Too old?';
+        
+        try {
+            $authentication->createAuthHeader();
+        } catch(\Akamai\Open\EdgeGrid\Authentication\Exception\SignerException\InvalidSignDataException $exception) {
+            if ($exception->getMessage() === $expectErrorMessage) {
+                throw new \Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException($exception->getMessage());
+            }
+        }
     }
 
     public function testSignHeadersArray()
@@ -323,27 +327,28 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
     {
         $_SERVER['HOME'] = __DIR__ . '/edgerc';
         $authentication = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile($section, $file);
+        $authentication->setHttpMethod('GET');
+
+        $authHeaderParams = $this->_paraseAuthHeader($authentication->createAuthHeader());
 
         $this->assertInstanceOf('\Akamai\Open\EdgeGrid\Authentication', $authentication);
-        $this->assertObjectHasAttribute(
-            'auth',
-            $authentication
-        );
-
-        $this->assertObjectHasAttribute(
-            'auth',
-            $authentication
-        );
 
         $this->assertEquals(
             'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
             $authentication->getHost()
         );
 
-        $this->assertObjectHasAttribute(
-            'max_body_size',
-            $authentication
-        );
+        $this->assertArrayHasKey('client_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('access_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('signature', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['signature']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['signature']);
     }
 
     public function testCreateFromEdgeRcUseCwd()
@@ -355,8 +360,8 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
             $unlink = true;
         }
 
-        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\ConfigException::class);
-        $this->expectErrorMessage('Section "default" does not exist!');
+        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException::class);
+        $expectErrorMessage = 'Section "default" does not exist!';
 
         try {
             $auth = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile();
@@ -365,6 +370,11 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
             if ($unlink) {
                 unlink('./.edgerc');
             }
+
+            if ($e->getMessage() === $expectErrorMessage) {
+                throw new \Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException($e->getMessage());
+            }
+
             throw $e;
         }
 
@@ -375,9 +385,16 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
     public function testCreateFromEdgeRcNonExistant()
     {
-        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\ConfigException::class);
-        $this->expectErrorMessage('Path to .edgerc file "/non-existant/.edgerc" does not exist!');
-        $auth = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile(null, '/non-existant/.edgerc');
+        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException::class);
+        $expectErrorMessage = 'Path to .edgerc file "/non-existant/.edgerc" does not exist!';
+        
+        try {
+            $auth = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile(null, '/non-existant/.edgerc');
+        } catch(\Akamai\Open\EdgeGrid\Authentication\Exception\ConfigException $exception) {
+            if ($exception->getMessage() === $expectErrorMessage) {
+                throw new \Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException($exception->getMessage());
+            }
+        }
     }
 
     public function testCreateFromEdgeRcColons()
@@ -437,22 +454,28 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $_ENV['AKAMAI_MAX_SIZE'] = 2048;
 
         $authentication = \Akamai\Open\EdgeGrid\Authentication::createFromEnv();
+        $authentication->setHttpMethod('GET');
 
         $this->assertInstanceOf('\Akamai\Open\EdgeGrid\Authentication', $authentication);
-        $this->assertObjectHasAttribute(
-            'auth',
-            $authentication
-        );
 
         $this->assertEquals(
             'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
             $authentication->getHost()
         );
 
-        $this->assertObjectHasAttribute(
-            'max_body_size',
-            $authentication
-        );
+        $authHeaderParams = $this->_paraseAuthHeader($authentication->createAuthHeader());
+
+        $this->assertArrayHasKey('client_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('access_token', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['client_token']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['client_token']);
+
+        $this->assertArrayHasKey('signature', $authHeaderParams);
+        $this->assertIsString($authHeaderParams['signature']);
+        $this->assertStringMatchesFormat('%s', $authHeaderParams['signature']);
     }
 
     /**
@@ -560,16 +583,32 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
     public function testCreateFromEnvInvalid()
     {
-        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\ConfigException::class);
-        $this->expectErrorMessage('Environment variables AKAMAI_HOST or AKAMAI_DEFAULT_HOST do not exist');
-        $authentication = \Akamai\Open\EdgeGrid\Authentication::createFromEnv();
+        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException::class);
+        $expectErrorMessage = 'Environment variables AKAMAI_HOST or AKAMAI_DEFAULT_HOST do not exist';
+        
+        try {
+            $authentication = \Akamai\Open\EdgeGrid\Authentication::createFromEnv();
+        } catch(\Akamai\Open\EdgeGrid\Authentication\Exception\ConfigException $exception) {
+            if ($exception->getMessage() === $expectErrorMessage) {
+                throw new \Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException($exception->getMessage());
+            }
+            throw $exception;
+        }
     }
 
     public function testCreateFromEnvInvalidSection()
     {
-        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\ConfigException::class);
-        $this->expectErrorMessage('Environment variable AKAMAI_TESTING_HOST does not exist');
-        $authentication = \Akamai\Open\EdgeGrid\Authentication::createFromEnv('testing');
+        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException::class);
+        $expectErrorMessage = 'Environment variable AKAMAI_TESTING_HOST does not exist';
+
+        try {
+            $authentication = \Akamai\Open\EdgeGrid\Authentication::createFromEnv('testing');
+        } catch(\Akamai\Open\EdgeGrid\Authentication\Exception\ConfigException $exception) {
+            if ($exception->getMessage() === $expectErrorMessage) {
+                throw new \Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException($exception->getMessage());
+            }
+            throw $exception;
+        }
     }
 
     /**
@@ -760,9 +799,9 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
     public function testCreateInstanceSectionFallbackInvalidEdgercNoEnv()
     {
-        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\ConfigException::class);
-        $this->expectErrorMessage('Unable to create instance using environment or .edgerc file');
-
+        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException::class);
+        $expectErrorMessage = 'Unable to create instance using environment or .edgerc file';
+        
         try {
             $authentication = \Akamai\Open\EdgeGrid\Authentication::createInstance(
                 'testing',
@@ -776,6 +815,10 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
             $this->assertEquals('Section "testing" does not exist!', $e->getPrevious()->getMessage());
 
+            if ($e->getMessage() === $expectErrorMessage) {
+                throw new \Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException($e->getMessage());
+            }
+
             throw $e;
         }
     }
@@ -787,9 +830,9 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
     {
         $_ENV['AKAMAI_HOST'] = 'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net';
 
-        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\ConfigException::class);
-        $this->expectErrorMessage('Unable to create instance using environment or .edgerc file');
-
+        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException::class);
+        $expectErrorMessage = 'Unable to create instance using environment or .edgerc file';
+        
         try {
             $authentication = \Akamai\Open\EdgeGrid\Authentication::createInstance(
                 "default",
@@ -803,6 +846,10 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
             $this->assertEquals('Section "default" does not exist!', $e->getPrevious()->getMessage());
 
+            if ($e->getMessage() === $expectErrorMessage) {
+                throw new \Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException($e->getMessage());
+            }
+
             throw $e;
         }
     }
@@ -814,9 +861,9 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
     {
         $_ENV['AKAMAI_TESTING_HOST'] = 'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net';
 
-        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\ConfigException::class);
-        $this->expectErrorMessage('Unable to create instance using environment or .edgerc file');
-
+        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException::class);
+        $expectErrorMessage = 'Unable to create instance using environment or .edgerc file';
+        
         try {
             $authentication = \Akamai\Open\EdgeGrid\Authentication::createInstance(
                 "testing",
@@ -833,6 +880,10 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
                 $e->getPrevious()->getMessage()
             );
 
+            if ($e->getMessage() === $expectErrorMessage) {
+                throw new \Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException($e->getMessage());
+            }
+
             throw $e;
         }
     }
@@ -844,8 +895,8 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
     {
         $_ENV['AKAMAI_HOST'] = 'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net';
 
-        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\ConfigException::class);
-        $this->expectErrorMessage('Unable to create instance using environment or .edgerc file');
+        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException::class);
+        $expectErrorMessage = 'Unable to create instance using environment or .edgerc file';
 
         try {
             $authentication = \Akamai\Open\EdgeGrid\Authentication::createInstance(
@@ -862,6 +913,10 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
                 'Environment variables AKAMAI_CLIENT_TOKEN or AKAMAI_DEFAULT_CLIENT_TOKEN do not exist',
                 $e->getPrevious()->getMessage()
             );
+
+            if ($e->getMessage() === $expectErrorMessage) {
+                throw new \Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException($e->getMessage());
+            }
 
             throw $e;
         }

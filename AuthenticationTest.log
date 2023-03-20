@@ -1,0 +1,132 @@
+PHPUnit 9.6.3 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.1.9
+Configuration: /var/www/html/phpunit.xml.dist
+
+.................W.........WWWW.WWWWWWWWWWWWWWW................  63 / 184 ( 34%)
+.......................................W......................W 126 / 184 ( 68%)
+.W...................WWWWWWWWWWWWWWW..................W...      184 / 184 (100%)
+
+Time: 00:01.234, Memory: 116.40 MB
+
+There were 39 warnings:
+
+1) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testTimestampTimeout
+Expecting E_ERROR and E_USER_ERROR is deprecated and will no longer be possible in PHPUnit 10.
+
+2) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testCreateFromEdgeRcUseCwd
+Expecting E_ERROR and E_USER_ERROR is deprecated and will no longer be possible in PHPUnit 10.
+
+3) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testCreateFromEdgeRcNonExistant
+Expecting E_ERROR and E_USER_ERROR is deprecated and will no longer be possible in PHPUnit 10.
+
+4) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testCreateFromEdgeRcColons
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+5) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testCreateFromEdgeRcColonsWithSpaces
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+6) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testCreateFromEnvDefaultSection
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+7) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testCreateFromEnvPreferSection
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+8) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testCreateFromEnvNoMaxSize
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+9) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testCreateFromEnvInvalid
+Expecting E_ERROR and E_USER_ERROR is deprecated and will no longer be possible in PHPUnit 10.
+
+10) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testCreateFromEnvInvalidSection
+Expecting E_ERROR and E_USER_ERROR is deprecated and will no longer be possible in PHPUnit 10.
+
+11) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testCreateInstancePreferEnv
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+12) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testCreateInstanceFallbackEdgeRc
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+13) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testCreateInstanceSection
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+14) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testCreateInstanceSectionFallback
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+15) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testCreateInstanceSectionFallbackEnv
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+16) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testCreateInstanceSectionFallbackInvalidEdgerc
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+17) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testCreateInstanceSectionFallbackInvalidEdgercNoEnv
+Expecting E_ERROR and E_USER_ERROR is deprecated and will no longer be possible in PHPUnit 10.
+
+18) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testCreateInstanceInvalidEdgercInvalidEnv
+Expecting E_ERROR and E_USER_ERROR is deprecated and will no longer be possible in PHPUnit 10.
+
+19) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testCreateInstanceInvalidEdgercInvalidEnvSection
+Expecting E_ERROR and E_USER_ERROR is deprecated and will no longer be possible in PHPUnit 10.
+
+20) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testCreateInstanceInvalidEdgercInvalidEnvSectionInvalidDefaultEnv
+Expecting E_ERROR and E_USER_ERROR is deprecated and will no longer be possible in PHPUnit 10.
+
+21) Akamai\Open\EdgeGrid\Tests\Client\AuthenticationTest::testLoggingDefault
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+22) Akamai\Open\EdgeGrid\Tests\Handler\AuthenticationTest::testRequireSetSignerCall
+Expecting E_ERROR and E_USER_ERROR is deprecated and will no longer be possible in PHPUnit 10.
+
+23) Akamai\Open\EdgeGrid\Tests\Handler\AuthenticationTest::testProxyNoSigner
+Expecting E_ERROR and E_USER_ERROR is deprecated and will no longer be possible in PHPUnit 10.
+
+24) Akamai\Open\EdgeGrid\Tests\Handler\AuthenticationTest::testCreateFromEnvDefaultSection
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+25) Akamai\Open\EdgeGrid\Tests\Handler\AuthenticationTest::testCreateFromEnvPreferSection
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+26) Akamai\Open\EdgeGrid\Tests\Handler\AuthenticationTest::testCreateFromEnvNoMaxSize
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+27) Akamai\Open\EdgeGrid\Tests\Handler\AuthenticationTest::testCreateFromEnvInvalid
+Expecting E_ERROR and E_USER_ERROR is deprecated and will no longer be possible in PHPUnit 10.
+
+28) Akamai\Open\EdgeGrid\Tests\Handler\AuthenticationTest::testCreateFromEnvInvalidSection
+Expecting E_ERROR and E_USER_ERROR is deprecated and will no longer be possible in PHPUnit 10.
+
+29) Akamai\Open\EdgeGrid\Tests\Handler\AuthenticationTest::testCreateInstancePreferEnv
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+30) Akamai\Open\EdgeGrid\Tests\Handler\AuthenticationTest::testCreateInstanceFallbackEdgeRc
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+31) Akamai\Open\EdgeGrid\Tests\Handler\AuthenticationTest::testCreateInstanceSection
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+32) Akamai\Open\EdgeGrid\Tests\Handler\AuthenticationTest::testCreateInstanceSectionFallback
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+33) Akamai\Open\EdgeGrid\Tests\Handler\AuthenticationTest::testCreateInstanceSectionFallbackEnv
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+34) Akamai\Open\EdgeGrid\Tests\Handler\AuthenticationTest::testCreateInstanceSectionFallbackInvalidEdgerc
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+35) Akamai\Open\EdgeGrid\Tests\Handler\AuthenticationTest::testCreateInstanceSectionFallbackInvalidEdgercNoEnv
+Expecting E_ERROR and E_USER_ERROR is deprecated and will no longer be possible in PHPUnit 10.
+
+36) Akamai\Open\EdgeGrid\Tests\Handler\AuthenticationTest::testCreateInstanceInvalidEdgercInvalidEnv
+Expecting E_ERROR and E_USER_ERROR is deprecated and will no longer be possible in PHPUnit 10.
+
+37) Akamai\Open\EdgeGrid\Tests\Handler\AuthenticationTest::testCreateInstanceInvalidEdgercInvalidEnvSection
+Expecting E_ERROR and E_USER_ERROR is deprecated and will no longer be possible in PHPUnit 10.
+
+38) Akamai\Open\EdgeGrid\Tests\Handler\AuthenticationTest::testCreateInstanceInvalidEdgercInvalidEnvSectionInvalidDefaultEnv
+Expecting E_ERROR and E_USER_ERROR is deprecated and will no longer be possible in PHPUnit 10.
+
+39) Akamai\Open\EdgeGrid\Tests\Handler\AuthenticationTest::testLoggingDefault
+assertObjectHasAttribute() is deprecated and will be removed in PHPUnit 10.
+
+WARNINGS!
+Tests: 184, Assertions: 649, Warnings: 39.
