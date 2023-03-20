@@ -4,6 +4,7 @@ namespace League\Flysystem\AkamaiNetStorage\Tests;
 
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
+use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToWriteFile;
@@ -23,6 +24,10 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
     protected $workingDir = 'working-dir';
 
     protected $baseUrl = 'company.akamaihd.net.example.org';
+
+    protected FilesystemAdapter $adapter;
+
+    protected array $config;
 
     /**
      * @var \League\Flysystem\Filesystem
@@ -118,10 +123,17 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
         $file = $this->workingDir . '/example.txt';
         $this->fs->write($file, __METHOD__);
 
-        $this->expectException(UnableToWriteFile::class);
-        $this->expectErrorMessage('Unable to write file at location: ' . $file . '. File already exists!');
+        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException::class);
+        $expectErrorMessage = 'Unable to write file at location: ' . $file . '. File already exists!';
 
-        $this->fs->write($file, __METHOD__);
+        try {
+            $this->fs->write($file, __METHOD__);
+        } catch(UnableToWriteFile $exception) {
+            if ($exception->getMessage() === $expectErrorMessage) {
+                throw new \Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException($exception->getMessage());
+            }
+            throw $exception;
+        }
     }
 
     public function testWriteStream()
@@ -146,16 +158,24 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
         fseek($fp, 0);
 
         $file = $this->workingDir . '/example.txt';
-        $this->expectException(UnableToWriteFile::class);
-        $this->expectErrorMessage('Unable to write file at location: ' . $file . '. File already exists!');
+
+        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException::class);
+        $expectErrorMessage = 'Unable to write file at location: ' . $file . '. File already exists!';
 
         try {
-            $this->fs->writeStream($file, $fp);
-        } finally {
-            $this->assertSame(
-                self::class . '::' . 'testWriteStream',
-                $this->fs->read($file)
-            );
+            try {
+                $this->fs->writeStream($file, $fp);
+            } finally {
+                $this->assertSame(
+                    self::class . '::' . 'testWriteStream',
+                    $this->fs->read($file)
+                );
+            }
+        } catch(UnableToWriteFile $exception) {
+            if ($exception->getMessage() === $expectErrorMessage) {
+                throw new \Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException($exception->getMessage());
+            }
+            throw $exception;
         }
     }
 
@@ -169,10 +189,18 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
     public function testReadNonExistent()
     {
         $file = $this->workingDir . '/non-existent.txt';
-        $this->expectException(UnableToReadFile::class);
-        $this->expectErrorMessage('Unable to read file from location: ' . $file . '.');
 
-        $this->fs->read($file);
+        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException::class);
+        $expectErrorMessage = 'Unable to read file from location: ' . $file . '.';
+
+        try {
+            $this->fs->read($file);
+        } catch(UnableToReadFile $exception) {
+            if (strpos($exception->getMessage(), $expectErrorMessage) === 0) {
+                throw new \Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException($exception->getMessage());
+            }
+            throw $exception;
+        }
     }
 
     public function testReadStream()
@@ -185,9 +213,18 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
     public function testReadStreamNonExistent()
     {
         $file = $this->workingDir . '/non-existent';
-        $this->expectException(UnableToReadFile::class);
-        $this->expectErrorMessage('Unable to read file from location: ' . $file . '. ');
-        $this->fs->readStream($file);
+
+        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException::class);
+        $expectErrorMessage = 'Unable to read file from location: ' . $file . '. ';
+
+        try {
+            $this->fs->readStream($file);
+        } catch(UnableToReadFile $exception) {
+            if (strpos($exception->getMessage(), $expectErrorMessage) === 0) {
+                throw new \Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException($exception->getMessage());
+            }
+            throw $exception;
+        }
     }
 
     public function testDelete()
@@ -204,20 +241,34 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
         $dir = $this->workingDir . '/test-dir';
         $this->fs->createDirectory($dir);
 
-        $this->expectException(UnableToDeleteFile::class);
-        $this->expectErrorMessage('Unable to delete file located at: ' . $dir . '. The path is directory!');
+        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException::class);
+        $expectErrorMessage = 'Unable to delete file located at: ' . $dir . '. The path is directory!';
 
-        $this->fs->delete($dir);
+        try {
+            $this->fs->delete($dir);
+        } catch(UnableToDeleteFile $exception) {
+            if (strpos($exception->getMessage(), $expectErrorMessage) === 0) {
+                throw new \Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException($exception->getMessage());
+            }
+            throw $exception;
+        }
     }
 
     public function testUnableToDeleteNonExistentFile()
     {
         $file = $this->workingDir . '/non-existent.txt';
 
-        $this->expectException(UnableToDeleteFile::class);
-        $this->expectErrorMessage('Unable to delete file located at: ' . $file . '.');
+        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException::class);
+        $expectErrorMessage = 'Unable to delete file located at: ' . $file . '.';
 
-        $this->fs->delete($file);
+        try {
+            $this->fs->delete($file);
+        } catch(UnableToDeleteFile $exception) {
+            if (strpos($exception->getMessage(), $expectErrorMessage) === 0) {
+                throw new \Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException($exception->getMessage());
+            }
+            throw $exception;
+        }
     }
 
     public function testListContents()
