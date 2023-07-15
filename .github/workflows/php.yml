@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "master", "v3.0-phpunit10" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "v3.0-phpunit10" ]
 
 permissions:
   contents: read
