@@ -2,9 +2,9 @@ name: PHP Composer
 
 on:
   push:
-    branches: [ "master", "v3.0-phpunit10" ]
+    branches: [ "master", "v3.0-dev", "v2.0-dev" ]
   pull_request:
-    branches: [ "master", "v3.0-phpunit10" ]
+    branches: [ "master", "v3.0-dev", "v2.0-dev" ]
 
 permissions:
   contents: read
