@@ -35,7 +35,7 @@ class AkamaiNetStorageClientFactoryTest extends \PHPUnit\Framework\TestCase
         new AkamaiNetStorageClientFactory($config);
     }
 
-    public function invalidConfigProvider()
+    public static function invalidConfigProvider()
     {
         return [
             [

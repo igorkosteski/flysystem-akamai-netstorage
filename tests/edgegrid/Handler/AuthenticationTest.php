@@ -124,26 +124,33 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
     public function testRequireSetSignerCall()
     {
-        $this->expectException(\Akamai\Open\EdgeGrid\Exception\HandlerException::class);
-        $this->expectErrorMessage('Signer not set, make sure to call setSigner first');
+        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException::class);
+        $expectErrorMessage = 'Signer not set, make sure to call setSigner first';
 
-        $container = [];
-        $handler = $this->getMockHandler([new Response(200)], $container);
+        try {
+            $container = [];
+            $handler = $this->getMockHandler([new Response(200)], $container);
 
-        $auth = new \Akamai\Open\EdgeGrid\Handler\Authentication();
+            $auth = new \Akamai\Open\EdgeGrid\Handler\Authentication();
 
-        // Because of PSR-7 immutability the history handler has
-        // to be the last one, otherwise it doesn't get the latest
-        // instance of the Request.
-        $handler->before('history', $auth, 'signer');
+            // Because of PSR-7 immutability the history handler has
+            // to be the last one, otherwise it doesn't get the latest
+            // instance of the Request.
+            $handler->before('history', $auth, 'signer');
 
-        $client = new \GuzzleHttp\Client(
-            [
-                'handler' => $handler,
-            ]
-        );
+            $client = new \GuzzleHttp\Client(
+                [
+                    'handler' => $handler,
+                ]
+            );
 
-        $client->get('https://test-akamaiapis.net');
+            $client->get('https://test-akamaiapis.net');
+        } catch(\Akamai\Open\EdgeGrid\Exception\HandlerException $exception) {
+            if ($exception->getMessage() === $expectErrorMessage) {
+                throw new \Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException($exception->getMessage());
+            }
+            throw $exception;
+        }
     }
 
     public function testProxyNonFluent()
@@ -157,9 +164,17 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
     public function testProxyNoSigner()
     {
-        $this->expectException(\Exception::class);
-        $this->expectErrorMessage('Signer not set, make sure to call setSigner first');
-        $auth = new \Akamai\Open\EdgeGrid\Handler\Authentication();
-        $auth->setHost('test.host');
+        $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException::class);
+        $expectErrorMessage = 'Signer not set, make sure to call setSigner first';
+
+        try {
+            $auth = new \Akamai\Open\EdgeGrid\Handler\Authentication();
+            $auth->setHost('test.host');
+        } catch(\Exception $exception) {
+            if ($exception->getMessage() === $expectErrorMessage) {
+                throw new \Akamai\Open\EdgeGrid\Authentication\Exception\CustomMessageException($exception->getMessage());
+            }
+            throw $exception;
+        }
     }
 }
