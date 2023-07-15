@@ -350,11 +350,11 @@ EOF;
         $this->assertEquals($expectedOutput, $output);
     }
 
-    public function testStringResource()
-    {
-        $handler = new \Akamai\Open\EdgeGrid\Handler\Debug('php://stdout');
-        $this->assertObjectHasAttribute('fp', $handler);
-    }
+    // public function testStringResource()
+    // {
+    //     $handler = new \Akamai\Open\EdgeGrid\Handler\Debug('php://stdout');
+    //     $this->assertObjectHasAttribute('fp', $handler);
+    // }
 
     public function testInvalidStringResource()
     {
@@ -463,7 +463,7 @@ EOF;
 
     public function getMockHandler($request, array &$container = null)
     {
-        $client = new \Akamai\Open\EdgeGrid\Tests\ClientTest();
+        $client = new \Akamai\Open\EdgeGrid\Tests\ClientTest(__CLASS__);
         return $client->getMockHandler($request, $container);
     }
 

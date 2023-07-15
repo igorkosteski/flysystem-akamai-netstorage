@@ -32,7 +32,8 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $query,
         $timestamp
     ) {
-        $this->setName($name);
+        // TODO: Fix that.
+        // $this->setName($name);
 
         $mockTimestamp = $this->prophesize('\Akamai\Open\EdgeGrid\Authentication\Timestamp');
         $mockTimestamp->__toString()->willReturn($timestamp);
@@ -1071,7 +1072,7 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $this->assertEquals($headers, $authentication->getHeaders());
     }
 
-    public function createFromEdgeRcProvider()
+    public static function createFromEdgeRcProvider()
     {
         return array(
             array(
@@ -1093,7 +1094,7 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         );
     }
 
-    public function createAuthHeaderDataProvider()
+    public static function createAuthHeaderDataProvider()
     {
         $testdata = json_decode(file_get_contents(__DIR__ . '/testdata.json'), true);
 

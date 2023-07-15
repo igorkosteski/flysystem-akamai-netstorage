@@ -8,6 +8,8 @@ use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToWriteFile;
+use ReflectionClass;
+use ReflectionMethod;
 
 class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
 {
@@ -79,6 +81,16 @@ class AkamaiNetStorageAdapterTest extends \PHPUnit\Framework\TestCase
             $this->fs->deleteDirectory($this->workingDir);
         } catch (\Exception $e) {
         }
+    }
+
+    private function getName(): string {
+        $id = $this->sortId();
+
+        if (str_contains($id, '::')) {
+            return substr($id, strpos($id, '::') + 2);
+        }
+
+        return $id;
     }
 
     public function testFileExists()
