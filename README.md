@@ -5,10 +5,10 @@ I created this package because [official akamai package](https://github.com/akam
 
 # Requirement
 
--   PHP: ^8.0.2
--   Guzzle: ^7.4.5
--   Monolog: ^2.3.4
--   Flysystem: ^3.0.16
+-   PHP: ^8.1
+-   Guzzle: ^7.5
+-   Monolog: ^3.0
+-   Flysystem: ^3.0
 
 # Installation
 
