@@ -27,7 +27,7 @@
   "require": {
     "php": "^8.2",
     "guzzlehttp/guzzle": "^7.8.2",
-    "monolog/monolog": "^3.25.1",
+    "monolog/monolog": "^3.0",
     "ext-fileinfo": "*",
     "league/flysystem": "^3.0"
   },
