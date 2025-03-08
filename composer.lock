@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e673e8b0b2f39c50b60878c8ef97fdc1",
+    "content-hash": "2a2ff1ae0fffbd515ce3d0a499284398",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -521,16 +521,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "dev-main",
+            "version": "3.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "548eeb3f1e313d943712b9fab0dc2e865a5a7bfc"
+                "reference": "aef6ee73a77a66e404dd6540934a9ef1b3c855b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/548eeb3f1e313d943712b9fab0dc2e865a5a7bfc",
-                "reference": "548eeb3f1e313d943712b9fab0dc2e865a5a7bfc",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/aef6ee73a77a66e404dd6540934a9ef1b3c855b4",
+                "reference": "aef6ee73a77a66e404dd6540934a9ef1b3c855b4",
                 "shasum": ""
             },
             "require": {
@@ -577,7 +577,6 @@
                 "rollbar/rollbar": "Allow sending log messages to Rollbar",
                 "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -609,7 +608,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Seldaek/monolog/issues",
-                "source": "https://github.com/Seldaek/monolog/tree/main"
+                "source": "https://github.com/Seldaek/monolog/tree/3.8.1"
             },
             "funding": [
                 {
@@ -621,7 +620,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-02-03T10:34:40+00:00"
+            "time": "2024-12-05T17:15:07+00:00"
         },
         {
             "name": "psr/http-client",
