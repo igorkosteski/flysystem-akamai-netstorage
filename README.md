@@ -5,9 +5,9 @@ I created this package because [official akamai package](https://github.com/akam
 
 # Requirement
 
--   PHP: ^8.1
--   Guzzle: ^7.5
--   Monolog: ^3.0
+-   PHP: ^8.2
+-   Guzzle: ^7.8.2
+-   Monolog: ^3.25.1
 -   Flysystem: ^3.0
 
 # Installation
